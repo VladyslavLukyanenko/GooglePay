@@ -33,12 +33,7 @@ Java.perform(function() {
 				console.log(JSON.stringify({
 					token: paymentData.getPaymentMethodToken().getToken(),
 					email: paymentData.getEmail(),
-					google_transaction: paymentData.getGoogleTransactionId(),
-					card: {
-						cardDescription: paymentData.getCardInfo().getCardDescription(),
-						cardDetails: paymentData.getCardInfo().getCardDetails(),
-						cardNetwork: paymentData.getCardInfo().getCardNetwork(),
-					},
+					card: paymentData.getCardInfo().getCardDetails(),
 					address: {
 						billing: getAddress(paymentData.getCardInfo().getBillingAddress()),
 						shipping: getAddress(paymentData.getShippingAddress()),
