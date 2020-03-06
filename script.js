@@ -28,8 +28,39 @@ Java.perform(function() {
 		const PaymentDataRequestbuild = PaymentDataRequest.newBuilder().setPhoneNumberRequired(false).setEmailRequired(true).setShippingAddressRequired(true).setShippingAddressRequirements(ShippingAddressRequirements.newBuilder().build()).setTransactionInfo(TransactionInfo_build).addAllowedPaymentMethods(paymentMethods).setCardRequirements(CardRequirements.newBuilder().addAllowedCardNetworks(authMethods).setAllowPrepaidCards(true).setBillingAddressRequired(true).setBillingAddressFormat(1).build()).setPaymentMethodTokenizationParameters(PaymentMethodTokenizationParameters_build).setUiRequired(true).build();
 		AutoResolveHelper.resolveTask(PaymentsClient_build.loadPaymentData(PaymentDataRequestbuild), currentActivity, 123);
 		FeedActivity.onActivityResult.overload('int', 'int', 'android.content.Intent').implementation = function(requestCode, resultCode, data) {
-			const paymentData = PaymentData.getFromIntent(data);
-
+			if (requestCode == 123 && resultCode == -1) {
+				const paymentData = PaymentData.getFromIntent(data);
+				console.log(JSON.stringify({
+					token: paymentData.getPaymentMethodToken().getToken(),
+					email: paymentData.getEmail(),
+					google_transaction: paymentData.getGoogleTransactionId(),
+					card: {
+						cardDescription: paymentData.getCardInfo().getCardDescription(),
+						cardDetails: paymentData.getCardInfo().getCardDetails(),
+						cardNetwork: paymentData.getCardInfo().getCardNetwork(),
+					},
+					address: {
+						billing: getAddress(paymentData.getCardInfo().getBillingAddress()),
+						shipping: getAddress(paymentData.getShippingAddress()),
+					}
+				}))
+			}
 		}
 	};
 });
+
+function getAddress(address) {
+	let name = address.getName();
+	name = name.split(' ')
+	return {
+		address1: address.getAddress1(),
+		address2: address.getAddress2(),
+		city: address.getLocality(),
+		country_code: address.getCountryCode(),
+		first_name: name[0],
+		last_name: name[1],
+		phone: address.getPhoneNumber(),
+		province_code: address.getAdministrativeArea(),
+		zip: address.getPostalCode()
+	}
+}
