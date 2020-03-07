@@ -9,15 +9,12 @@
 #include <signal.h>
 #include <unistd.h>
 
-//#define CBC 1
+#define CBC 1
 
-static void phex(uint8_t* str);
-static int test_encrypt_cbc(void);
-static int test_decrypt_cbc(void);
 void  ALARMhandler(int sig);
 void delfilei();
 
-//#include "aes.h"
+#include "aes.h"
 
 void delay(int number_of_seconds)
 {
@@ -54,7 +51,18 @@ char globalroot[4000];
 void delfilei()
 {
     remove(globalroot);
-    exit(0);
+}
+
+char* readFileBytes(const char *name)
+{
+    FILE *fl = fopen(name, "r");
+    fseek(fl, 0, SEEK_END);
+    long len = ftell(fl);
+    char *ret = malloc(len);
+    fseek(fl, 0, SEEK_SET);
+    fread(ret, 1, len, fl);
+    fclose(fl);
+    return ret;
 }
 
 int main(int argc, char *argv[])
@@ -100,6 +108,7 @@ int main(int argc, char *argv[])
 
     char cmd[] = "./injector -R v8 -f com.shopify.frenzy.app -s ";
     strcat(cmd, root);
+    strcat(root, " > file.txt");
     char temp[2000];
     strcpy(temp, "");
     strcat(temp, "rm -rf ");
@@ -107,38 +116,27 @@ int main(int argc, char *argv[])
     strcat(globalroot, root);
 
     //ENCRYPTION STUFF
-    /*struct AES_ctx ctx;
+    struct AES_ctx ctx;
 
-    uint8_t key[] = "aaaaaaaaaaaaaaaa";
-    uint8_t iv[]  = "bbbbbbbbbbbbbbbb";
-    uint8_t str[] = "This a sample text, Length eq 32";
-
-    printf("\n Raw text\n");
-
-    for (i = 0; i < 32; ++i) {
-        printf("%.2x", str[i]);
-    }
-
-    AES_init_ctx_iv(&ctx, key, iv);
-    AES_CBC_encrypt_buffer(&ctx, str, 32);
-    printf("\n Encrypted text\n");
-    for (i = 0; i < 32; ++i) {
-        printf("%.2x", str[i]);
-    }
-
-    printf("\n Decrypted text\n");
-    AES_init_ctx_iv(&ctx, key, iv);
-    AES_CBC_decrypt_buffer(&ctx, str, 32);
-    for (i = 0; i < 32; ++i) {
-        printf("%.2x", str[i]);
-    }
-
-    printf("\n");*/
+    uint8_t key[] = "2605B3C8E77A28A5";
+    uint8_t iv[]  = "C28E4231A8F0715D";
 
     signal(SIGALRM, ALARMhandler);
     alarm(30);
     system(cmd);
-    remove(root);
+
+    FILE *encf = fopen("file.txt", "r");
+    char str[50000];
+    fread(str, 50000, 1, encf);
+
+    AES_init_ctx_iv(&ctx, key, iv);
+    AES_CBC_encrypt_buffer(&ctx, str, 32);
+
+    printf(str);
+    fclose(encf);
+    remove("file.txt");
+
+    exit();
 
     return 0;
 }
