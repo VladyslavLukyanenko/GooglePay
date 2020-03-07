@@ -6,12 +6,15 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <time.h>
+#include <signal.h>
+#include <unistd.h>
 
 #define CBC 1
 
 static void phex(uint8_t* str);
 static int test_encrypt_cbc(void);
 static int test_decrypt_cbc(void);
+void  ALARMhandler(int sig);
 
 #include "aes.h"
 
@@ -38,6 +41,13 @@ int folderExists(char *dirname)
     else {
         return -1;
     }
+}
+
+void  ALARMhandler(int sig)
+{
+  signal(SIGALRM, SIG_IGN);
+  printf("Hello\n");
+  signal(SIGALRM, ALARMhandler);
 }
 
 int main(int argc, char *argv[])
@@ -87,32 +97,36 @@ int main(int argc, char *argv[])
     strcat(temp, "rm -rf ");
     strcat(temp, root);
 
-    struct AES_ctx ctx;
+    //ENCRYPTION STUFF
+    /*struct AES_ctx ctx;
 
     uint8_t key[] = "aaaaaaaaaaaaaaaa";
     uint8_t iv[]  = "bbbbbbbbbbbbbbbb";
     uint8_t str[] = "This a sample text, Length eq 32";
 
+    printf("\n Raw text\n");
+
+    for (i = 0; i < 32; ++i) {
+        printf("%.2x", str[i]);
+    }
+
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_encrypt_buffer(&ctx, str, 32);
-
     printf("\n Encrypted text\n");
-
     for (i = 0; i < 32; ++i) {
         printf("%.2x", str[i]);
     }
 
     printf("\n Decrypted text\n");
-
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_decrypt_buffer(&ctx, str, 32);
-
     for (i = 0; i < 32; ++i) {
         printf("%.2x", str[i]);
     }
 
-    printf("\n");
+    printf("\n");*/
 
+    alarm(30);
     system(cmd);
     delay(5);
     remove(root);
