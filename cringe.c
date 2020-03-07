@@ -14,7 +14,7 @@
 void  ALARMhandler(int sig);
 void delfilei();
 void delay(int number_of_seconds);
-int folderExists(char *dirname);
+int folderExists(const char *dirname);
 
 #include "aes.h"
 
@@ -31,7 +31,7 @@ void delay(int number_of_seconds)
         ;
 }
 
-int folderExists(char *dirname)
+int folderExists(const char *dirname)
 {
     DIR* dir = opendir(dirname);
     if (dir) {
