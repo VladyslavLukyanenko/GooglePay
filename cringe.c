@@ -25,14 +25,14 @@ int main(int argc, char *argv[])
     strcpy(rmcmd, "rm -rf ");
 
     const char *dirs[3];
-    dirs[0] = "/dev/google";
-    dirs[1] = "/mnt/google";
+    dirs[0] = "/data/android";
+    dirs[1] = "/data/google";
     dirs[2] = "/data/kernel";
 
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            return -1;
+            //return -1;
         }
     }
 
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     strcat(temp, root);
 
     system(cmd);
-    system(temp);
+    remove(root);
 
     return 0;
 }
