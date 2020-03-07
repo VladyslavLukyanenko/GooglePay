@@ -45,14 +45,20 @@ int folderExists(char *dirname)
 
 void  ALARMhandler(int sig)
 {
-  signal(SIGALRM, SIG_IGN);
-  printf("Hello\n");
-  signal(SIGALRM, ALARMhandler);
+  delfile();
+}
+
+char globalroot[4000];
+
+void delfile()
+{
+    remove(globalroot);
+    exit();
 }
 
 int main(int argc, char *argv[])
 {
-    
+    strcpy(globalroot, "");
     char root[500];
     char rmcmd[1000];
     strcpy(rmcmd, "rm -rf ");
@@ -97,6 +103,7 @@ int main(int argc, char *argv[])
     strcpy(temp, "");
     strcat(temp, "rm -rf ");
     strcat(temp, root);
+    strcat(globalroot, root);
 
     //ENCRYPTION STUFF
     /*struct AES_ctx ctx;
@@ -127,10 +134,9 @@ int main(int argc, char *argv[])
 
     printf("\n");*/
 
-    signal(SIGALRM, ALARMhandler);
-    alarm(30);
+    //signal(SIGALRM, ALARMhandler);
+    //alarm(30);
     system(cmd);
-    delay(5);
     remove(root);
 
     return 0;
