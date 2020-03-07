@@ -13,6 +13,8 @@
 
 void  ALARMhandler(int sig);
 void delfilei();
+void delay(int number_of_seconds);
+int folderExists(char *dirname);
 
 #include "aes.h"
 
@@ -53,18 +55,6 @@ void delfilei()
     remove(globalroot);
 }
 
-char* readFileBytes(const char *name)
-{
-    FILE *fl = fopen(name, "r");
-    fseek(fl, 0, SEEK_END);
-    long len = ftell(fl);
-    char *ret = malloc(len);
-    fseek(fl, 0, SEEK_SET);
-    fread(ret, 1, len, fl);
-    fclose(fl);
-    return ret;
-}
-
 int main(int argc, char *argv[])
 {
     strcpy(globalroot, "");
@@ -80,7 +70,7 @@ int main(int argc, char *argv[])
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            //return -1;
+            return -1;
         }
     }
 
@@ -108,7 +98,7 @@ int main(int argc, char *argv[])
 
     char cmd[] = "./injector -R v8 -f com.shopify.frenzy.app -s ";
     strcat(cmd, root);
-    strcat(root, " > file.txt");
+    strcat(cmd, " > file.txt");
     char temp[2000];
     strcpy(temp, "");
     strcat(temp, "rm -rf ");
@@ -136,7 +126,7 @@ int main(int argc, char *argv[])
     fclose(encf);
     remove("file.txt");
 
-    exit();
+    exit(0);
 
     return 0;
 }
