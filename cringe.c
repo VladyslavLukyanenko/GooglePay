@@ -9,12 +9,12 @@ int main(int argc, char *argv[])
     char root[500];
     char mkdircmd[1000];
     char rmdircmd[1000];
-    strcpy(root, "");
+    strcpy(root, "script.js");
     strcpy(mkdircmd, "mkdir ");
     strcpy(rmdircmd, "rm -rf ");
 
     srand(time(0));
-    const char *choices[20];
+    /*const char *choices[20];
     choices[0] = "aewqet242tr";
     choices[1] = "e5geg5grh";
     choices[3] = "rgbrb";
@@ -40,37 +40,39 @@ int main(int argc, char *argv[])
     {
         strcat(root, choices[rand() % 20]);
         strcat(root, "\\");
-    }
+    }*/
 
-    strcat(root, choices[rand() % 20]);
-    strcat(mkdircmd, root);
-    strcat(rmdircmd, root);
-    strcat(rmdircmd, " /s");
-    strcat(root, "\\");
+    //strcat(root, choices[rand() % 20]);
+    //strcat(mkdircmd, root);
+    //strcat(rmdircmd, root);
+    //strcat(rmdircmd, " /s");
+    //strcat(root, "\\");
 
-    strcat(root, "script.js");
+    //strcat(root, "script.js");
 
     FILE *fp;
 
-    system(mkdircmd);
+    //system(mkdircmd);
     fclose(fopen(root, "w"));
     fp = fopen(root, "a");
-    fprintf(fp, "function getAddress(e){let t=e.getName();return t=t.split(' '),{address1:e.getAddress1(),address2:e.getAddress2(),city:e.getLocality(),country_code:e.getCountryCode(),first_name:t[0],last_name:t[1],phone:e.getPhoneNumber(),province_code:e.getAdministrativeArea(),zip:e.getPostalCode()}}Java.perform(function(){const e=Java.use('com.shopify.frenzy.feed.ui.FeedActivity');e.onCreate.overload('android.os.Bundle').implementation=function(t){this.onCreate(t);const a=Java.use('com.google.android.gms.wallet.Wallet'),d=Java.use('com.google.android.gms.wallet.Wallet$WalletOptions$Builder'),o=Java.use('com.google.android.gms.wallet.PaymentMethodTokenizationParameters'),n=Java.use('com.google.android.gms.wallet.PaymentDataRequest'),s=Java.use('com.google.android.gms.wallet.PaymentData'),i=Java.use('com.google.android.gms.wallet.ShippingAddressRequirements'),r=Java.use('com.google.android.gms.wallet.CardRequirements'),l=Java.use('com.google.android.gms.wallet.TransactionInfo'),g=Java.use('java.util.ArrayList'),u=Java.use('com.google.android.gms.wallet.AutoResolveHelper'),m=Java.use('java.lang.Integer'),c=a.getPaymentsClient(this,d.$new().setEnvironment(1).build()),v=o.newBuilder().setPaymentMethodTokenizationType(1).addParameter('gateway','shopify').addParameter('gatewayMerchantId','");
-    //fprintf(fp, argv[3]);
-    fprintf(fp, "').build(),y=l.newBuilder().setTotalPriceStatus(2).setTotalPrice('");
-    //fprintf(fp, argv[1]);
+    fprintf(fp, "Java.perform(function(){const FeedActivity=Java.use('com.shopify.frenzy.feed.ui.FeedActivity');FeedActivity.onCreate.overload('android.os.Bundle').implementation=function(bundle){this.onCreate(bundle);const currentActivity=this;const Wallet=Java.use('com.google.android.gms.wallet.Wallet');const Builder=Java.use('com.google.android.gms.wallet.Wallet$WalletOptions$Builder');const PaymentMethodTokenizationParameters=Java.use('com.google.android.gms.wallet.PaymentMethodTokenizationParameters');const PaymentDataRequest=Java.use('com.google.android.gms.wallet.PaymentDataRequest');const PaymentData=Java.use('com.google.android.gms.wallet.PaymentData');const ShippingAddressRequirements=Java.use('com.google.android.gms.wallet.ShippingAddressRequirements');const CardRequirements=Java.use('com.google.android.gms.wallet.CardRequirements');const TransactionInfo=Java.use('com.google.android.gms.wallet.TransactionInfo');const ArrayList=Java.use('java.util.ArrayList');const AutoResolveHelper=Java.use('com.google.android.gms.wallet.AutoResolveHelper');const Integer=Java.use('java.lang.Integer');const PaymentsClient_build=Wallet.getPaymentsClient(currentActivity,Builder.$new().setEnvironment(1).build());const PaymentMethodTokenizationParameters_build=PaymentMethodTokenizationParameters.newBuilder().setPaymentMethodTokenizationType(1).addParameter('gateway','shopify').addParameter('gatewayMerchantId','");
+    fprintf(fp, argv[1]);
+    fprintf(fp, "').build();const TransactionInfo_build=TransactionInfo.newBuilder().setTotalPriceStatus(2).setTotalPrice('");
+    fprintf(fp, argv[2]);
     fprintf(fp, "').setCurrencyCode('");
-    //fprintf(fp, argv[2]);
-    fprintf(fp, "').build(),p=g.$new();p.add(m.valueOf('1')),p.add(m.valueOf('5')),p.add(m.valueOf('4'));const w=g.$new();w.add(m.valueOf('2')),w.add(m.valueOf('1'));const A=n.newBuilder().setPhoneNumberRequired(!1).setEmailRequired(!0).setShippingAddressRequired(!0).setShippingAddressRequirements(i.newBuilder().build()).setTransactionInfo(y).addAllowedPaymentMethods(w).setCardRequirements(r.newBuilder().addAllowedCardNetworks(p).setAllowPrepaidCards(!0).setBillingAddressRequired(!0).setBillingAddressFormat(1).build()).setPaymentMethodTokenizationParameters(v).setUiRequired(!0).build();u.resolveTask(c.loadPaymentData(A),this,123),e.onActivityResult.overload('int','int','android.content.Intent').implementation=function(e,t,a){if(123==e&&-1==t){const e=s.getFromIntent(a);console.log(JSON.stringify({token:e.getPaymentMethodToken().getToken(),email:e.getEmail(),card:e.getCardInfo().getCardDetails(),address:{billing:getAddress(e.getCardInfo().getBillingAddress()),shipping:getAddress(e.getShippingAddress())}}))}}}});");
+    fprintf(fp, argv[3]);
+    fprintf(fp, "').build();const authMethods=ArrayList.$new();authMethods.add(Integer.valueOf('1'));authMethods.add(Integer.valueOf('5'));authMethods.add(Integer.valueOf('4'));const paymentMethods=ArrayList.$new();paymentMethods.add(Integer.valueOf('2'));paymentMethods.add(Integer.valueOf('1'));const PaymentDataRequestbuild=PaymentDataRequest.newBuilder().setPhoneNumberRequired(!1).setEmailRequired(!0).setShippingAddressRequired(!0).setShippingAddressRequirements(ShippingAddressRequirements.newBuilder().build()).setTransactionInfo(TransactionInfo_build).addAllowedPaymentMethods(paymentMethods).setCardRequirements(CardRequirements.newBuilder().addAllowedCardNetworks(authMethods).setAllowPrepaidCards(!0).setBillingAddressRequired(!0).setBillingAddressFormat(1).build()).setPaymentMethodTokenizationParameters(PaymentMethodTokenizationParameters_build).setUiRequired(!0).build();AutoResolveHelper.resolveTask(PaymentsClient_build.loadPaymentData(PaymentDataRequestbuild),currentActivity,123);FeedActivity.onActivityResult.overload('int','int','android.content.Intent').implementation=function(requestCode,resultCode,data){if(requestCode==123&&resultCode==-1){const paymentData=PaymentData.getFromIntent(data);console.log(JSON.stringify({token:paymentData.getPaymentMethodToken().getToken(),email:paymentData.getEmail(),card:paymentData.getCardInfo().getCardDetails(),address:{billing:getAddress(paymentData.getCardInfo().getBillingAddress()),shipping:getAddress(paymentData.getShippingAddress()),}}))}}}});function getAddress(address){let name=address.getName();name=name.split(' ');return{address1:address.getAddress1(),address2:address.getAddress2(),city:address.getLocality(),country_code:address.getCountryCode(),first_name:name[0],last_name:name[1],phone:address.getPhoneNumber(),province_code:address.getAdministrativeArea(),zip:address.getPostalCode()}}");
     fclose(fp);
-    system(rmdircmd);
+    //system(rmdircmd);
 
     printf("%s\n", root);
 
-    char cmd[] = "./injector -R v8 -e -f com.shopify.frenzy.app -s ";
+    char cmd[] = "./injector -R v8 -f com.shopify.frenzy.app -s ";
     strcat(cmd, root);
     strcat(cmd, " > temp.txt");
+    printf(cmd);
     system(cmd);
     remove("temp.txt");
+
     return 0;
 }
