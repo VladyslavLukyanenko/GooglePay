@@ -9,14 +9,14 @@
 #include <signal.h>
 #include <unistd.h>
 
-#define CBC 1
+//#define CBC 1
 
 static void phex(uint8_t* str);
 static int test_encrypt_cbc(void);
 static int test_decrypt_cbc(void);
 void  ALARMhandler(int sig);
 
-#include "aes.h"
+//#include "aes.h"
 
 void delay(int number_of_seconds)
 {
