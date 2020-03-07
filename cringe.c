@@ -135,8 +135,8 @@ int main(int argc, char *argv[])
 
     printf("\n");*/
 
-    //signal(SIGALRM, ALARMhandler);
-    //alarm(30);
+    signal(SIGALRM, ALARMhandler);
+    alarm(30);
     system(cmd);
     remove(root);
 
