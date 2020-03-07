@@ -113,9 +113,9 @@ int main(int argc, char *argv[])
 
     printf("\n");
 
-    //system(cmd);
+    system(cmd);
     delay(5);
-    //remove(root);
+    remove(root);
 
     return 0;
 }
