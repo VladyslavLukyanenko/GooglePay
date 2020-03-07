@@ -52,6 +52,7 @@ void  ALARMhandler(int sig)
 
 int main(int argc, char *argv[])
 {
+    
     char root[500];
     char rmcmd[1000];
     strcpy(rmcmd, "rm -rf ");
@@ -126,6 +127,7 @@ int main(int argc, char *argv[])
 
     printf("\n");*/
 
+    signal(SIGALRM, ALARMhandler);
     alarm(30);
     system(cmd);
     delay(5);
