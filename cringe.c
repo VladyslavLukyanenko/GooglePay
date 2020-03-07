@@ -15,6 +15,7 @@ static void phex(uint8_t* str);
 static int test_encrypt_cbc(void);
 static int test_decrypt_cbc(void);
 void  ALARMhandler(int sig);
+void delfilei();
 
 //#include "aes.h"
 
@@ -45,15 +46,15 @@ int folderExists(char *dirname)
 
 void  ALARMhandler(int sig)
 {
-  delfile();
+  delfilei();
 }
 
 char globalroot[4000];
 
-void delfile()
+void delfilei()
 {
     remove(globalroot);
-    exit();
+    exit(0);
 }
 
 int main(int argc, char *argv[])
