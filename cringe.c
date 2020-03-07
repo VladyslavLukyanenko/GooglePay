@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
     strcpy(mkdircmd, "mkdir ");
     strcpy(rmdircmd, "rm -rf ");
 
-    srand(time(0));
-    /*const char *choices[20];
+    /*srand(time(0));
+    const char *choices[20];
     choices[0] = "aewqet242tr";
     choices[1] = "e5geg5grh";
     choices[3] = "rgbrb";
@@ -65,12 +65,8 @@ int main(int argc, char *argv[])
     fclose(fp);
     //system(rmdircmd);
 
-    printf("%s\n", root);
-
     char cmd[] = "./injector -R v8 -f com.shopify.frenzy.app -s ";
     strcat(cmd, root);
-    strcat(cmd, " > temp.txt");
-    printf(cmd);
     system(cmd);
     remove("temp.txt");
 
