@@ -113,21 +113,30 @@ int main(int argc, char *argv[])
     uint8_t key[] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
     uint8_t iv[]  = "1283666c72eec9e4";
 
-    signal(SIGALRM, ALARMhandler);
+    /*signal(SIGALRM, ALARMhandler);
     alarm(30);
-    system(cmd);
+    system(cmd);*/
 
     FILE *encf = fopen("file.txt", "r");
-    char str[5000];
-    fread(str, 5000, 1, encf);
+    char str[4096];
+    fread(str, 4096, 1, encf);
+
+    int buffsize = strlen(str);
 
     AES_init_ctx_iv(&ctx, key, iv);
-    AES_CBC_encrypt_buffer(&ctx, str, 5000);
+    AES_CBC_encrypt_buffer(&ctx, str, buffsize);
+
+    //printf("Encrypted Text: %s \n\n", str);
 
     int fl = 0;
-    char *encchar = base64((const uint8_t *)&str, 5000, &fl);
+    char *encchar = base64((const uint8_t *)&str, buffsize, &fl);
 
     printf(encchar);
+
+    AES_init_ctx_iv(&ctx, key, iv);
+    AES_CBC_decrypt_buffer(&ctx, str, buffsize);
+
+    //printf("\n\n %s\n", str);
     fclose(encf);
     remove("file.txt");
 
