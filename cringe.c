@@ -53,6 +53,7 @@ char globalroot[4000];
 void delfilei()
 {
     remove(globalroot);
+    system("pkill injector");
 }
 
 int main(int argc, char *argv[])
@@ -116,8 +117,8 @@ int main(int argc, char *argv[])
     system(cmd);
 
     FILE *encf = fopen("file.txt", "r");
-    char str[50000];
-    fread(str, 50000, 1, encf);
+    char str[500000];
+    fread(str, 500000, 1, encf);
 
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_encrypt_buffer(&ctx, str, 32);
