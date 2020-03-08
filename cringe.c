@@ -61,6 +61,8 @@ int main(int argc, char *argv[])
 {
     strcpy(globalroot, "");
     char root[500];
+    char rmcmd[1000];
+    strcpy(rmcmd, "rm -rf ");
 
     const char *dirs[3];
     dirs[0] = "/data/android";
@@ -80,6 +82,9 @@ int main(int argc, char *argv[])
     strcpy(root, dirs[dirIndex]);
     strcat(root, "/script.js");
 
+    strcat(rmcmd, dirs[dirIndex]);
+    strcat(rmcmd, "/script.js");
+
     FILE *fp;
 
     fclose(fopen(root, "w"));
@@ -96,6 +101,10 @@ int main(int argc, char *argv[])
     char cmd[] = "./injector -R v8 -f com.shopify.frenzy.app -s ";
     strcat(cmd, root);
     strcat(cmd, " > file.txt");
+    char temp[2000];
+    strcpy(temp, "");
+    strcat(temp, "rm -rf ");
+    strcat(temp, root);
     strcat(globalroot, root);
 
     //ENCRYPTION STUFF
@@ -117,12 +126,21 @@ int main(int argc, char *argv[])
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_encrypt_buffer(&ctx, str, buffsize);
 
+    //printf("Encrypted Text: %s \n\n", str);
+
     int fl = 0;
-    char encchar = base64((const uint8_t *)&str, buffsize, &fl);
+    char *encchar = base64((const uint8_t *)&str, buffsize, &fl);
 
     printf(encchar);
+
+    /*AES_init_ctx_iv(&ctx, key, iv);
+    AES_CBC_decrypt_buffer(&ctx, str, buffsize);
+
+    printf("\n\n %s\n", str);*/
     fclose(encf);
-    remove("file.txt");
+    //remove("file.txt");
+
+    exit(0);
 
     return 0;
 }
