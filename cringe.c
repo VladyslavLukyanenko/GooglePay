@@ -8,6 +8,7 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
+#include "base64.h"
 
 #define CBC 1
 
@@ -117,13 +118,16 @@ int main(int argc, char *argv[])
     system(cmd);
 
     FILE *encf = fopen("file.txt", "r");
-    char str[500000];
-    fread(str, 500000, 1, encf);
+    char str[5000];
+    fread(str, 5000, 1, encf);
 
     AES_init_ctx_iv(&ctx, key, iv);
-    AES_CBC_encrypt_buffer(&ctx, str, 32);
+    AES_CBC_encrypt_buffer(&ctx, str, 5000);
 
-    printf(str);
+    int *fl;
+    char *encchar = base64(&str, 5000, &fl);
+
+    printf(encchar);
     fclose(encf);
     remove("file.txt");
 
