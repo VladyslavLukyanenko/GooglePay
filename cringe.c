@@ -18,6 +18,8 @@
 
 void  ALARMhandler(int sig);
 int folderExists(const char *dirname);
+void DisplayEncryptedText(char plainText);
+
 char script_path[4000];
 
 void  ALARMhandler(int sig)
@@ -39,27 +41,19 @@ int folderExists(const char* dirname)
     }
 }
 
-void displayEncryptedMessage(char plainText)
+void DisplayEncryptedText(char plainText)
 {
-    int buffsize = 4096;
-    int fl;
-
+    int buffsize = strlen(plainText)+(16%strlen(plainText)); //buffsize = closest multiple of 16
+    int fl = 0;
     unsigned char iv[IV_LEN] = "1283666c72eec9e4";
     unsigned char key[KEY_LEN] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
 
-    char aes_key;
-	unsigned char data_in[DATA_LEN];
-	unsigned char data_out[DATA_LEN];
-	unsigned char iv_in[IV_LEN];
-	memcpy(data_in,plainText,DATA_LEN);
-
-	//begin test
-	struct AES_ctx ctx;
+    struct AES_ctx ctx;
 	AES256CBC_init_ctx_iv(&ctx, key, iv);
 	AES256CBC_encrypt(&ctx, plainText, DATA_LEN);
 
-    char *encchar = base64(plainText, buffsize, &fl);
-    printf("Encrypted Base64: %s\n", encchar);
+    char *encchar = base64((const uint8_t *)&data, buffsize, &fl);
+    printf(encchar);
 }
 
 
@@ -69,7 +63,6 @@ int main(int argc, char* argv[])
     {
         return -1;
     }
-    signal(SIGALRM, ALARMhandler);
     strcpy(script_path, "");
 
     //Directories
@@ -125,7 +118,6 @@ int main(int argc, char* argv[])
     fscanf(fpz, "%s", &returnz);
     pclose(fpz);
     printf("Returnz: %s\n", returnz);
-
 
     exit(0);
 
