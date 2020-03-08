@@ -8,18 +8,9 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
-
-#define IV_LEN 16
-#define KEY_LEN 32
-#define DATA_LEN 4096
-
-#include "aes256cbc.h"
-#include "base64.h"
-
+#define BUFSIZE 512
 void  ALARMhandler(int sig);
 int folderExists(const char *dirname);
-void DisplayEncryptedText(char plainText);
-
 char script_path[4000];
 
 void  ALARMhandler(int sig)
@@ -40,21 +31,25 @@ int folderExists(const char* dirname)
         return -1;
     }
 }
+int parse_output(const char* command) {
 
-void DisplayEncryptedText(char plainText)
-{
-    int buffsize = strlen(plainText)+(16%strlen(plainText)); //buffsize = closest multiple of 16
-    int fl = 0;
-    unsigned char iv[IV_LEN] = "1283666c72eec9e4";
-    unsigned char key[KEY_LEN] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
+    char buf[BUFSIZE];
+    FILE *fp;
 
-    struct AES_ctx ctx;
-	AES256CBC_init_ctx_iv(&ctx, key, iv);
-	AES256CBC_encrypt(&ctx, plainText, DATA_LEN);
+    if ((fp = popen(command, "r")) == NULL) {
+        printf("Error opening pipe!\n");
+        return -1;
+    }
 
-    printf("Encrypted Data: %s\n", plainText);
-    //char *encchar = base64(plainText, buffsize, &fl);
-    //printf("Base 64: %s\n", encchar);
+    while (fgets(buf, BUFSIZE, fp) != NULL) {
+        // Do whatever you want here...
+        printf(buf);
+    }
+
+    if(pclose(fp))  {
+        printf("Command not found or exited with error status\n");
+        return -1;
+    }
 }
 
 
@@ -64,6 +59,7 @@ int main(int argc, char* argv[])
     {
         return -1;
     }
+    signal(SIGALRM, ALARMhandler);
     strcpy(script_path, "");
 
     //Directories
@@ -109,20 +105,11 @@ int main(int argc, char* argv[])
     //Main Command
     char cmd[4000] = "./injector -R v8 -f com.shopify.frenzy.app -s ";
     strcat(cmd, script_path);
-    //strcat(cmd, " > file.txt");
-    //Remove Command
-    printf("Cmd: %s\n", cmd);
+
     signal(SIGALRM, ALARMhandler);
     alarm(20);
-    char returnz[90000];
-    char returnb[45000];
-    FILE *fpz = popen(cmd, "r");
-    fscanf(fpz, "%s", &returnz);
-    fscanf(fpz, "%s", &returnb);
-    strcat(returnz, returnb);
-    pclose(fpz);
-    printf("Returnz: %s\n", returnz);
-    DisplayEncryptedText(returnz);
+    parse_output(cmd);
+
 
     exit(0);
 
