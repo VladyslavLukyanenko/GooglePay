@@ -52,8 +52,8 @@ void DisplayEncryptedText(char plainText)
 	AES256CBC_init_ctx_iv(&ctx, key, iv);
 	AES256CBC_encrypt(&ctx, plainText, DATA_LEN);
 
-    char *encchar = base64((const uint8_t *)&data, buffsize, &fl);
-    printf(encchar);
+    char *encchar = base64((const uint8_t *)&plainText, buffsize, &fl);
+    printf("Base 64: %s\n", encchar);
 }
 
 
