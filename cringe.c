@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            return -1;
+            return -99;
         }
     }
 
@@ -110,8 +110,8 @@ int main(int argc, char *argv[])
     //ENCRYPTION STUFF
     struct AES_ctx ctx;
 
-    uint8_t key[] = "2605B3C8E77A28A5";
-    uint8_t iv[]  = "C28E4231A8F0715D";
+    uint8_t key[] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
+    uint8_t iv[]  = "1283666c72eec9e4";
 
     signal(SIGALRM, ALARMhandler);
     alarm(30);
