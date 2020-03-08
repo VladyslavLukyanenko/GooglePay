@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_encrypt_buffer(&ctx, str, 5000);
 
-    int *fl;
+    int fl = 0;
     char *encchar = base64(&str, 5000, &fl);
 
     printf(encchar);
