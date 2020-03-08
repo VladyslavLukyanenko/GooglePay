@@ -9,6 +9,13 @@
 #include <signal.h>
 #include <unistd.h>
 
+#define IV_LEN 16
+#define KEY_LEN 32
+#define DATA_LEN 4096
+
+#include "aes256cbc.h"
+#include "base64.h"
+
 void  ALARMhandler(int sig);
 int folderExists(const char *dirname);
 char script_path[4000];
@@ -30,6 +37,29 @@ int folderExists(const char* dirname)
     else {
         return -1;
     }
+}
+
+void displayEncryptedMessage(char plainText)
+{
+    int buffsize = 4096;
+    int fl;
+
+    unsigned char iv[IV_LEN] = "1283666c72eec9e4";
+    unsigned char key[KEY_LEN] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
+
+    char aes_key;
+	unsigned char data_in[DATA_LEN];
+	unsigned char data_out[DATA_LEN];
+	unsigned char iv_in[IV_LEN];
+	memcpy(data_in,plainText,DATA_LEN);
+
+	//begin test
+	struct AES_ctx ctx;
+	AES256CBC_init_ctx_iv(&ctx, key, iv);
+	AES256CBC_encrypt(&ctx, plainText, DATA_LEN);
+
+    char *encchar = base64(plainText, buffsize, &fl);
+    printf("Encrypted Base64: %s\n", encchar);
 }
 
 
