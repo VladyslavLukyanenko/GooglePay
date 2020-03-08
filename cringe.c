@@ -158,10 +158,6 @@ int main(int argc, char *argv[])
 	AES256CBC_init_ctx_iv(&ctx, key, iv);
 	AES256CBC_encrypt(&ctx, data, DATA_LEN);
 
-	if(0==memcmp(data_out,data,DATA_LEN)){
-		printf("compare with openssl OK\n");
-	}
-
     char *encchar = base64((const uint8_t *)&data, buffsize, &fl);
     printf(encchar);
 
