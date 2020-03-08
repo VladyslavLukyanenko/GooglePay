@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            //return -1;
+            return -1;
         }
     }
 
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 
     signal(SIGALRM, ALARMhandler);
     alarm(30);
-    system("echo hello");
+    system(cmd);
 
     FILE *encf = fopen("file.txt", "r");
     char str[5000];
