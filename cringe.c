@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            //return -99;
+            return -99;
         }
     }
 
