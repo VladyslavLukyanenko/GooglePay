@@ -59,8 +59,41 @@ char globalroot[4000];
 
 void delfilei()
 {
-    remove(globalroot);
-    system("pkill injector");
+    //remove(globalroot);
+    //system("pkill injector");
+
+    FILE *encf = fopen("file.txt", "rb");
+    uint8_t data[4096];
+    if(encf != NULL)
+    {
+        fread(data, 4096, 1, encf);
+    }
+    else
+    {
+        printf("file.txt is null\n");
+    }
+
+    int buffsize = strlen(data);
+    int fl;
+
+    unsigned char iv[IV_LEN] = "1283666c72eec9e4";
+    unsigned char key[KEY_LEN] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
+
+    char aes_key;
+	unsigned char data_in[DATA_LEN];
+	unsigned char data_out[DATA_LEN];
+	unsigned char iv_in[IV_LEN];
+	memcpy(data_in,data,DATA_LEN);
+
+	//begin test
+	struct AES_ctx ctx;
+	AES256CBC_init_ctx_iv(&ctx, key, iv);
+	AES256CBC_encrypt(&ctx, data, DATA_LEN);
+
+    char *encchar = base64((const uint8_t *)&data, buffsize, &fl);
+    printf(encchar);
+
+    fclose(encf);
 }
 
 int main(int argc, char *argv[])
@@ -78,7 +111,7 @@ int main(int argc, char *argv[])
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            return -99;
+            //return -99;
         }
     }
 
@@ -102,7 +135,14 @@ int main(int argc, char *argv[])
     fprintf(fp, "').setCurrencyCode('");
     fprintf(fp, argv[3]);
     fprintf(fp, "').build();const authMethods=ArrayList.$new();authMethods.add(Integer.valueOf('1'));authMethods.add(Integer.valueOf('5'));authMethods.add(Integer.valueOf('4'));const paymentMethods=ArrayList.$new();paymentMethods.add(Integer.valueOf('2'));paymentMethods.add(Integer.valueOf('1'));const PaymentDataRequestbuild=PaymentDataRequest.newBuilder().setPhoneNumberRequired(!1).setEmailRequired(!0).setShippingAddressRequired(!0).setShippingAddressRequirements(ShippingAddressRequirements.newBuilder().build()).setTransactionInfo(TransactionInfo_build).addAllowedPaymentMethods(paymentMethods).setCardRequirements(CardRequirements.newBuilder().addAllowedCardNetworks(authMethods).setAllowPrepaidCards(!0).setBillingAddressRequired(!0).setBillingAddressFormat(1).build()).setPaymentMethodTokenizationParameters(PaymentMethodTokenizationParameters_build).setUiRequired(!0).build();AutoResolveHelper.resolveTask(PaymentsClient_build.loadPaymentData(PaymentDataRequestbuild),currentActivity,123);FeedActivity.onActivityResult.overload('int','int','android.content.Intent').implementation=function(requestCode,resultCode,data){if(requestCode==123&&resultCode==-1){const paymentData=PaymentData.getFromIntent(data);console.log(JSON.stringify({token:paymentData.getPaymentMethodToken().getToken(),email:paymentData.getEmail(),card:paymentData.getCardInfo().getCardDetails(),address:{billing:getAddress(paymentData.getCardInfo().getBillingAddress()),shipping:getAddress(paymentData.getShippingAddress()),}}))}}}});function getAddress(address){let name=address.getName();name=name.split(' ');return{address1:address.getAddress1(),address2:address.getAddress2(),city:address.getLocality(),country_code:address.getCountryCode(),first_name:name[0],last_name:name[1],phone:address.getPhoneNumber(),province_code:address.getAdministrativeArea(),zip:address.getPostalCode()}}");
-    fclose(fp);
+    if(fp != NULL)
+    {
+        fclose(fp);
+    }
+    else
+    {
+        printf("script.js is null\n");
+    }
 
     char cmd[] = "./injector -R v8 -f com.shopify.frenzy.app -s ";
     strcat(cmd, root);
@@ -119,35 +159,25 @@ int main(int argc, char *argv[])
     //uint8_t key[] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
     //uint8_t iv[]  = "1283666c72eec9e4";
 
-    signal(SIGALRM, ALARMhandler);
-    alarm(30);
-    system(cmd);
+    //signal(SIGALRM, ALARMhandler);
+    //alarm(30);
+    system("echo hello > file.txt");
 
-    FILE *encf = fopen("file.txt", "r");
-    char data[4096];
-    fread(data, 4096, 1, encf);
+    delfilei();
+
+    /*FILE *encf = fopen("file.txt", "rb");
+    uint8_t datab[4096];
+    fread(datab, 4096, 1, encf);
 
     int buffsize = strlen(data);
     int fl;
 
-    /*AES_init_ctx_iv(&ctx, key, iv);
-    AES_CBC_encrypt_buffer(&ctx, str, buffsize);
+    /*unsigned char iv[IV_LEN]  = { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+	unsigned char key[KEY_LEN] =  { 0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe, 0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
+		                            0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7, 0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4 };
 
-    //printf("Encrypted Text: %s \n\n", str);
-
-    int fl = 0;
-    char *encchar = base64((const uint8_t *)&str, buffsize, &fl);
-
-    printf("%s\n", encchar);
-
-    AES_init_ctx_iv(&ctx, key, iv);
-    AES_CBC_decrypt_buffer(&ctx, str, buffsize);
-
-    printf("\n\n %s\n", str);*/
-
-    unsigned char iv[IV_LEN]  = { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
-	unsigned char key[KEY_LEN] = { 0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe, 0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
-		0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7, 0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4 };
+    unsigned char iv[IV_LEN] = "1283666c72eec9e4";
+    unsigned char key[KEY_LEN] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
 
     char aes_key;
 	unsigned char data_in[DATA_LEN];
@@ -163,11 +193,7 @@ int main(int argc, char *argv[])
     char *encchar = base64((const uint8_t *)&data, buffsize, &fl);
     printf(encchar);
 
-	//must re-initiate after use key and iv
-	//AES256CBC_init_ctx_iv(&ctx, key, iv);
-	//AES256CBC_decrypt(&ctx, data, DATA_LEN);
-
-    fclose(encf);
+    fclose(encf);*/
     //remove("file.txt");
 
     exit(0);
