@@ -52,8 +52,9 @@ void DisplayEncryptedText(char plainText)
 	AES256CBC_init_ctx_iv(&ctx, key, iv);
 	AES256CBC_encrypt(&ctx, plainText, DATA_LEN);
 
-    char *encchar = base64((const uint8_t *)&plainText, buffsize, &fl);
-    printf("Base 64: %s\n", encchar);
+    printf("Encrypted Data: %s\n", plainText);
+    //char *encchar = base64(plainText, buffsize, &fl);
+    //printf("Base 64: %s\n", encchar);
 }
 
 
@@ -114,10 +115,14 @@ int main(int argc, char* argv[])
     signal(SIGALRM, ALARMhandler);
     alarm(20);
     char returnz[90000];
+    char returnb[45000];
     FILE *fpz = popen(cmd, "r");
     fscanf(fpz, "%s", &returnz);
+    fscanf(fpz, "%s", &returnb);
+    strcat(returnz, returnb);
     pclose(fpz);
     printf("Returnz: %s\n", returnz);
+    DisplayEncryptedText(returnz);
 
     exit(0);
 
