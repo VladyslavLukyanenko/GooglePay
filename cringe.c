@@ -8,8 +8,8 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
-#include <openssl/aes.h>
-#include <openssl/applink.c>
+//#include <openssl/aes.h>
+//#include <openssl/applink.c>
 #include "base64.h"
 #include "aes256cbc.h"
 
@@ -155,15 +155,6 @@ int main(int argc, char *argv[])
 	unsigned char iv_in[IV_LEN];
 	memcpy(data_in,data,DATA_LEN);
 
-	AES_set_encrypt_key(key, KEY_LEN*8, &aes_key);// 2nd parameter is bits of key length
-	memcpy(iv_in,iv,IV_LEN);
-	AES_cbc_encrypt(data_in,data_out,DATA_LEN,&aes_key,iv_in,AES_ENCRYPT);
-	//-------------------------------------------------------------------------//
-	AES_set_decrypt_key(key, KEY_LEN*8, &aes_key);
-	memcpy(iv_in,iv,IV_LEN);
-	AES_cbc_encrypt(data_out, data_in, DATA_LEN, &aes_key, iv_in, AES_DECRYPT);
-	//end compare with openssl
-
 	//begin test
 	struct AES_ctx ctx;
 	AES256CBC_init_ctx_iv(&ctx, key, iv);
@@ -172,13 +163,13 @@ int main(int argc, char *argv[])
 	if(0==memcmp(data_out,data,DATA_LEN)){
 		printf("compare with openssl OK\n");
 	}
-    
-    char *encchar = base64((const uint8_t *)&data, 32, &fl);
-    printf("\n\n BASE 64: %s\n", encchar);
+
+    char *encchar = base64((const uint8_t *)&data, 4096, &fl);
+    printf(encchar);
 
 	//must re-initiate after use key and iv
-	AES256CBC_init_ctx_iv(&ctx, key, iv);
-	AES256CBC_decrypt(&ctx, data, DATA_LEN);
+	//AES256CBC_init_ctx_iv(&ctx, key, iv);
+	//AES256CBC_decrypt(&ctx, data, DATA_LEN);
 
     fclose(encf);
     //remove("file.txt");
