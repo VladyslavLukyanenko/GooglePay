@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            //return -99;
+            return -99;
         }
     }
 
@@ -159,9 +159,9 @@ int main(int argc, char *argv[])
     //uint8_t key[] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
     //uint8_t iv[]  = "1283666c72eec9e4";
 
-    //signal(SIGALRM, ALARMhandler);
-    //alarm(30);
-    system("echo hello > file.txt");
+    signal(SIGALRM, ALARMhandler);
+    alarm(30);
+    system(cmd);
 
     delfilei();
 
