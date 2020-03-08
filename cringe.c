@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            return -1;
+            //return -1;
         }
     }
 
@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
 
     signal(SIGALRM, ALARMhandler);
     alarm(30);
-    system(cmd);
+    system("echo hello");
 
     FILE *encf = fopen("file.txt", "r");
     char str[5000];
@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     AES_CBC_encrypt_buffer(&ctx, str, 5000);
 
     int fl = 0;
-    char *encchar = base64(&str, 5000, &fl);
+    char *encchar = base64((const uint8_t *)&str, 5000, &fl);
 
     printf(encchar);
     fclose(encf);
