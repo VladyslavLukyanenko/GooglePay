@@ -8,16 +8,22 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
+//#include <openssl/aes.h>
+//#include <openssl/applink.c>
 #include "base64.h"
+#include "aes256cbc.h"
 
-#define CBC 1
+//#define CBC 1
+#define IV_LEN 16
+#define KEY_LEN 32
+#define DATA_LEN 64
 
 void  ALARMhandler(int sig);
 void delfilei();
 void delay(int number_of_seconds);
 int folderExists(const char *dirname);
 
-#include "aes.h"
+//#include "aes.h"
 
 void delay(int number_of_seconds)
 {
@@ -72,7 +78,7 @@ int main(int argc, char *argv[])
     int i;
     for(i = 0; i < 3; i++){
         if(folderExists(dirs[i]) < 0){
-            return -99;
+            //return -99;
         }
     }
 
@@ -108,22 +114,23 @@ int main(int argc, char *argv[])
     strcat(globalroot, root);
 
     //ENCRYPTION STUFF
-    struct AES_ctx ctx;
+    //struct AES_ctx ctx;
 
-    uint8_t key[] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
-    uint8_t iv[]  = "1283666c72eec9e4";
+    //uint8_t key[] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
+    //uint8_t iv[]  = "1283666c72eec9e4";
 
-    signal(SIGALRM, ALARMhandler);
+    /*signal(SIGALRM, ALARMhandler);
     alarm(30);
-    system(cmd);
+    system(cmd);*/
 
     FILE *encf = fopen("file.txt", "r");
-    char str[4096];
-    fread(str, 4096, 1, encf);
+    char data[4096];
+    fread(data, 4096, 1, encf);
 
-    int buffsize = strlen(str);
+    int buffsize = strlen(data);
+    int fl;
 
-    AES_init_ctx_iv(&ctx, key, iv);
+    /*AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_encrypt_buffer(&ctx, str, buffsize);
 
     //printf("Encrypted Text: %s \n\n", str);
@@ -131,12 +138,48 @@ int main(int argc, char *argv[])
     int fl = 0;
     char *encchar = base64((const uint8_t *)&str, buffsize, &fl);
 
-    printf(encchar);
+    printf("%s\n", encchar);
 
-    /*AES_init_ctx_iv(&ctx, key, iv);
+    AES_init_ctx_iv(&ctx, key, iv);
     AES_CBC_decrypt_buffer(&ctx, str, buffsize);
 
     printf("\n\n %s\n", str);*/
+
+    unsigned char iv[IV_LEN]  = { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+	unsigned char key[KEY_LEN] = { 0x60, 0x3d, 0xeb, 0x10, 0x15, 0xca, 0x71, 0xbe, 0x2b, 0x73, 0xae, 0xf0, 0x85, 0x7d, 0x77, 0x81,
+		0x1f, 0x35, 0x2c, 0x07, 0x3b, 0x61, 0x08, 0xd7, 0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf, 0xf4 };
+
+    char aes_key;
+	unsigned char data_in[DATA_LEN];
+	unsigned char data_out[DATA_LEN];
+	unsigned char iv_in[IV_LEN];
+	memcpy(data_in,data,DATA_LEN);
+
+	AES_set_encrypt_key(key, KEY_LEN*8, &aes_key);// 2nd parameter is bits of key length
+	memcpy(iv_in,iv,IV_LEN);
+	AES_cbc_encrypt(data_in,data_out,DATA_LEN,&aes_key,iv_in,AES_ENCRYPT);
+	//-------------------------------------------------------------------------//
+	AES_set_decrypt_key(key, KEY_LEN*8, &aes_key);
+	memcpy(iv_in,iv,IV_LEN);
+	AES_cbc_encrypt(data_out, data_in, DATA_LEN, &aes_key, iv_in, AES_DECRYPT);
+	//end compare with openssl
+
+	//begin test
+	struct AES_ctx ctx;
+	AES256CBC_init_ctx_iv(&ctx, key, iv);
+	AES256CBC_encrypt(&ctx, data, DATA_LEN);
+
+	if(0==memcmp(data_out,data,DATA_LEN)){
+		printf("compare with openssl OK\n");
+	}
+    
+    char *encchar = base64((const uint8_t *)&data, 32, &fl);
+    printf("\n\n BASE 64: %s\n", encchar);
+
+	//must re-initiate after use key and iv
+	AES256CBC_init_ctx_iv(&ctx, key, iv);
+	AES256CBC_decrypt(&ctx, data, DATA_LEN);
+
     fclose(encf);
     //remove("file.txt");
 
