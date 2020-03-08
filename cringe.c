@@ -8,6 +8,8 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
+//#include <openssl/aes.h>
+//#include <openssl/applink.c>
 #include "base64.h"
 #include "aes256cbc.h"
 
