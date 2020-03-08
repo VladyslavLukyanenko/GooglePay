@@ -119,9 +119,9 @@ int main(int argc, char *argv[])
     //uint8_t key[] = "6jaaz2jwsnf0a7kw2k7dqf7k62apknua";
     //uint8_t iv[]  = "1283666c72eec9e4";
 
-    /*signal(SIGALRM, ALARMhandler);
+    signal(SIGALRM, ALARMhandler);
     alarm(30);
-    system(cmd);*/
+    system(cmd);
 
     FILE *encf = fopen("file.txt", "r");
     char data[4096];
