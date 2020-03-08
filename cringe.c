@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 		printf("compare with openssl OK\n");
 	}
 
-    char *encchar = base64((const uint8_t *)&data, 4096, &fl);
+    char *encchar = base64((const uint8_t *)&data, buffsize, &fl);
     printf(encchar);
 
 	//must re-initiate after use key and iv
