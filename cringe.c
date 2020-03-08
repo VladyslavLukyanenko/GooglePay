@@ -73,7 +73,7 @@ void delfilei()
         printf("file.txt is null\n");
     }
 
-    int buffsize = strlen(data);
+    int buffsize = 4096;
     int fl;
 
     unsigned char iv[IV_LEN] = "1283666c72eec9e4";
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     //uint8_t iv[]  = "1283666c72eec9e4";
 
     signal(SIGALRM, ALARMhandler);
-    alarm(30);
+    alarm(20);
     system(cmd);
 
     delfilei();
