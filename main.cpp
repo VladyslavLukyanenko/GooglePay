@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
     strcat(cmd, script_path);
 
     signal(SIGALRM, ALARMhandler);
-    alarm(10);
+    alarm(15);
     parse_output(cmd);
 
     return 0
