@@ -52,6 +52,7 @@ int parse_output(const char* command) {
         printf("Command not found or exited with error status\n");
         return -1;
     }
+    return 0;
 }
 
 
@@ -109,8 +110,8 @@ int main(int argc, char* argv[])
     strcat(cmd, script_path);
 
     signal(SIGALRM, ALARMhandler);
-    alarm(20);
+    alarm(10);
     parse_output(cmd);
 
-    return 0;
+    return 0
 }
