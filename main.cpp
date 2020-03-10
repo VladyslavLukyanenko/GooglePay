@@ -8,6 +8,7 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
+#include <thread>
 
 using namespace std;
 
@@ -51,6 +52,12 @@ int parse_output(const char* command) {
         printf("Command not found or exited with error status\n");
         return -1;
     }
+    return 0;
+}
+int automateButton()
+{
+    usleep(10000000);
+    system("su -c \"input tap 528 1389\"");
     return 0;
 }
 
@@ -104,10 +111,9 @@ int main(int argc, char* argv[])
     {
         printf("script.js is null\n");
     }
-    //Main Command
     char cmd[4000] = "./injector -R v8 -f com.shopify.frenzy.app -s ";
     strcat(cmd, script_path);
-
+    std::thread thread (automateButton); 
     signal(SIGALRM, ALARMhandler);
     alarm(15);
     parse_output(cmd);
