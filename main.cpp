@@ -18,7 +18,6 @@ char script_path[4000];
 void  ALARMhandler(int sig)
 {
   system("pkill -f injector");
-  system("pkill -f frida-inject");
   remove(script_path);
 }
 
@@ -113,5 +112,5 @@ int main(int argc, char* argv[])
     alarm(15);
     parse_output(cmd);
 
-    return 0
+    return 0;
 }
