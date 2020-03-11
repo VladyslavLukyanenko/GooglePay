@@ -8,7 +8,6 @@
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
-#include <thread>
 
 using namespace std;
 
@@ -46,7 +45,6 @@ int parse_output(const char* command) {
     }
 
     while (fgets(buf, BUFSIZE, fp) != NULL) {
-        // Do whatever you want here...
         printf(buf);
     }
 
@@ -66,13 +64,11 @@ int main(int argc, char* argv[])
 
     strcpy(script_path, "");
 
-    //Directories
     const char* dirs[3];
     dirs[0] = "/data/android";
     dirs[1] = "/data/google";
     dirs[2] = "/data/kernel";
 
-    //Check if folders exist
     int i;
     for (i = 0; i < 3; i++) {
         if (folderExists(dirs[i]) < 0) {
