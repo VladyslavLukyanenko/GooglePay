@@ -117,7 +117,7 @@ string parse_output2(const char* command) {
 
 void printEncrypted(string input)
 {
-    unsigned char *key = (unsigned char *)"bf3c199c2470cb477d907b1e0917c17b";
+    unsigned char key = {0x33, 0x61, 0x73, 0x63, 0x31, 0x39, 0x39, 0x63, 0x32, 0x34, 0x37, 0x30, 0x63, 0x62, 0x34, 0x37, 0x37, 0x64, 0x39, 0x30, 0x37, 0x62, 0x31, 0x65, 0x30, 0x39, 0x33, 0x32, 0x63, 0x31, 0x37, 0x62};
     unsigned char *plaintext = (unsigned char*)input.c_str();
     unsigned char *ciphertext;
     unsigned char *decryptedtext;
@@ -211,7 +211,7 @@ int main(int argc, char* argv[])
     cmd += script_path;
 
     signal(SIGALRM, ALARMhandler);
-    alarm(10);
+    alarm(15);
     string tok = parse_output(cmd.c_str());
     //printf(tok.c_str());
     printEncrypted(tok);
