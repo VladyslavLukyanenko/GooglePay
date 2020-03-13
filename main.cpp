@@ -134,7 +134,6 @@ string parse_output2(const char* command) {
 void printEncrypted(string input)
 {
     unsigned char *key = (unsigned char *)"bf3c199c2470cb477d907b1e0917c17b";
-    unsigned char *iv = (unsigned char *)"5183666c72eec9e4";
     unsigned char *plaintext = (unsigned char*)input.c_str();
     unsigned char *ciphertext;
     unsigned char *decryptedtext;
