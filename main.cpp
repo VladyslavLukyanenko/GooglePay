@@ -83,7 +83,7 @@ string parse_output(const char* command) {
         unsigned char err[] = {0x31, 0x38, 0x69, 0x77, 0x47, 0x79, 0x66, 0x5a, 0x74, 0x36, 0x71, 0x6c, 0x57, 0x54, 0x2b, 0x74, 0x67, 0x6a, 0x75, 0x52, 0x4d, 0x74, 0x4a, 0x61, 0x44, 0x74, 0x73, 0x46, 0x42, 0x51, 0x55, 0x46, 0x42, 0x51, 0x55, 0x46, 0x42, 0x51, 0x55, 0x46, 0x42, 0x51, 0x55, 0x3d};
         std::string err_ = decrypt(err, sizeof(err));
                 const char * err1_ = err_.c_str();
-                //printf(err1_);
+                printf(err1_);
         return ret;
     }
 
@@ -136,20 +136,15 @@ void printEncrypted(string input)
     unsigned char *key = (unsigned char *)"bf3c199c2470cb477d907b1e0917c17b";
     unsigned char *iv = (unsigned char *)"5183666c72eec9e4";
     unsigned char *plaintext = (unsigned char*)input.c_str();
-    //printf("%s\n", plaintext);
     unsigned char *ciphertext;
     unsigned char *decryptedtext;
     unsigned char base64text[2048];
     unsigned char ciphertext1[2048];
     unsigned int ciphertext_len, cipher_len, ciphertext1_len;
     AES aes(256);
-    ciphertext = aes.EncryptCBC(plaintext, strlen ((char *)plaintext), key, iv, ciphertext_len);
+    ciphertext = aes.EncryptECB(plaintext, strlen ((char *)plaintext), key, ciphertext_len);
     base642_encode(ciphertext, ciphertext_len, base64text, cipher_len);
     printf("%s", base64text);
-    /*base642_decode(base64text, cipher_len, ciphertext1, ciphertext1_len);
-    printf("decoded base64\n");
-    decryptedtext = aes.DecryptCBC(ciphertext1, ciphertext1_len, key, iv);
-    printf("%s\n", decryptedtext);*/
 }
 
 int main(int argc, char* argv[])
